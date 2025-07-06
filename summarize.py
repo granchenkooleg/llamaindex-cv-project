@@ -4,6 +4,7 @@ def summarize_candidates(index, documents):
     llm = GenerativeEngineLLM()
     query_engine = index.as_query_engine(llm=llm)
 
+    summaries = []
     for doc in documents:
         print(f"\n🧑 Candidate ID: {doc.metadata['id']}")
         print(f"📂 Category: {doc.metadata['category']}")
@@ -11,3 +12,5 @@ def summarize_candidates(index, documents):
         response = query_engine.query(query)
         print("📝 Summary:")
         print(response)
+        summaries.append(str(response))
+        return summaries
