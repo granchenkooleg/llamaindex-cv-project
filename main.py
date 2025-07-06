@@ -5,10 +5,19 @@ from rank_candidates import rank_top_candidates
 
 
 def main():
-    documents = load_resumes(10)
+    sample_size = 2
+    top_n = 3
+
+    # Ensure sample_size is at least top_n
+    sample_size = max(sample_size, top_n)
+
+    documents = load_resumes(sample_size)
     index = build_index(documents)
     # summarize_candidates(index, documents)
-    rank_top_candidates("archive/Resume/Resume.csv", category="INFORMATION-TECHNOLOGY", top_n=3)
+    rank_top_candidates("archive/Resume/Resume.csv", category="INFORMATION-TECHNOLOGY", top_n=top_n, sample_size=sample_size)
 
 if __name__ == "__main__":
     main()
+    print("Ranking completed successfully.")
+    print("To view the candidates in a web interface, run 'streamlit run app.py' in the terminal.")
+    print("Thank you for using the candidate ranking system!")  

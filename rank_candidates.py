@@ -26,7 +26,7 @@ def rate_candidate(llm, resume_text, category):
 
     return score, summary
 
-def rank_top_candidates(csv_path: str, category: str, top_n: int):
+def rank_top_candidates(csv_path: str, category: str, top_n: int, sample_size: int = 5):
     df = pd.read_csv(csv_path)
 
     # Normalize category column and input
@@ -40,7 +40,7 @@ def rank_top_candidates(csv_path: str, category: str, top_n: int):
 
     # Filter and sample
     filtered_df = df[df["Category"] == category]
-    sample_size = min(10, len(filtered_df))
+    sample_size = min(sample_size, len(filtered_df))
     sampled_df = filtered_df.sample(n=sample_size, random_state=42)
 
     llm = GenerativeEngineLLM()
