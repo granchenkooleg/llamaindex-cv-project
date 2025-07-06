@@ -28,12 +28,25 @@ def rate_candidate(llm, resume_text, category):
 
 def rank_top_candidates(csv_path: str, category: str, top_n: int):
     df = pd.read_csv(csv_path)
-    filtered_df = df[df["Category"] == category].sample(n=10, random_state=42)
+
+    # Normalize category column and input
+    df["Category"] = df["Category"].str.upper().str.strip()
+    category = category.upper().strip()
+
+    # Validate category
+    if category not in df["Category"].unique():
+        print(f"Category '{category}' not found. Available categories: {df['Category'].unique()}")
+        return
+
+    # Filter and sample
+    filtered_df = df[df["Category"] == category]
+    sample_size = min(10, len(filtered_df))
+    sampled_df = filtered_df.sample(n=sample_size, random_state=42)
 
     llm = GenerativeEngineLLM()
     candidates = []
 
-    for _, row in filtered_df.iterrows():
+    for _, row in sampled_df.iterrows():
         score, summary = rate_candidate(llm, row["Resume_str"], category)
         candidates.append({
             "id": row["ID"],
