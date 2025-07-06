@@ -26,7 +26,7 @@ def rate_candidate(llm, resume_text, category):
 
     return score, summary
 
-def rank_top_candidates(csv_path, category="Information-Technology", top_n=3):
+def rank_top_candidates(csv_path: str, category: str, top_n: int):
     df = pd.read_csv(csv_path)
     filtered_df = df[df["Category"] == category].sample(n=10, random_state=42)
 
