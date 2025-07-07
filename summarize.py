@@ -13,4 +13,6 @@ def summarize_candidates(index, documents):
         print("📝 Summary:")
         print(response)
         summaries.append(str(response))
-        return summaries
+
+    return summaries
+

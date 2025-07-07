@@ -5,7 +5,7 @@ from rank_candidates import rank_top_candidates
 
 
 def main():
-    sample_size = 2
+    sample_size = 10
     top_n = 3
 
     # Ensure sample_size is at least top_n

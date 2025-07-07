@@ -2,7 +2,7 @@ import pandas as pd
 from llama_index.core import Document
 
 # As we have certificate issues with the Kaggle API, we will load the dataset directly from a CSV file.
-def load_resumes(sample_size=30):
+def load_resumes(sample_size=5):
     # The path to Resume.csv
     df = pd.read_csv("archive/Resume/Resume.csv")
 
