@@ -7,7 +7,7 @@ from main import load_resumes, build_index
 SAMPLE_SIZE = 5
 
 # Load resumes and build index
-@st.cache_data(show_spinner=True)
+@st.cache_resource(show_spinner=True)
 def load_and_summarize():
     documents = load_resumes(SAMPLE_SIZE)
     index = build_index(documents)
