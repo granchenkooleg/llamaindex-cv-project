@@ -19,5 +19,4 @@ def main():
 if __name__ == "__main__":
     main()
     print("Ranking completed successfully.")
-    print("To view the candidates in a web interface, run 'streamlit run app.py' in the terminal.")
-    print("Thank you for using the candidate ranking system!")  
+    print("To view the candidates in a web interface, run 'streamlit run app.py' in the terminal.") 
