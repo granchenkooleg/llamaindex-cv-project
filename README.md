@@ -1,6 +1,7 @@
 - CVs files from https://www.kaggle.com/datasets/snehaanbhawal/resume-dataset
 - Storing Embeddings in a Vector Database: ChromaDB
 - The task has been done using LlamaIndex.
+  
 Expected outcome:
 1. The repository contains a straightforward web application that lists candidates. Users can click on any candidate to view detailed information and a summary of their profile.
 2. Evaluate and rank candidates based on their resumes using a custom or default prompt. It leverages an LLM to assess each candidate’s suitability for a specific job category or role.
