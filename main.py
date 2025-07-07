@@ -1,11 +1,11 @@
 from load_data import load_resumes
 from build_index import build_index
 from summarize import summarize_candidates
-from rank_candidates import rank_top_candidates
+from rank_candidates import rank_top_candidates_with_index
 
 
 def main():
-    sample_size = 10
+    sample_size = 3
     top_n = 3
 
     # Ensure sample_size is at least top_n
@@ -14,7 +14,7 @@ def main():
     documents = load_resumes(sample_size)
     index = build_index(documents)
     # summarize_candidates(index, documents)
-    rank_top_candidates("archive/Resume/Resume.csv", category="INFORMATION-TECHNOLOGY", top_n=top_n, sample_size=sample_size)
+    rank_top_candidates_with_index(index, documents, category="INFORMATION-TECHNOLOGY", top_n=top_n)
 
 if __name__ == "__main__":
     main()

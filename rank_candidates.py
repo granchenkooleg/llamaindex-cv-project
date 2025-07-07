@@ -1,55 +1,45 @@
-import pandas as pd
-from gen_engine_llm import GenerativeEngineLLM
 
-def rate_candidate(llm, resume_text, category):
-    prompt = (
-        f"You are a hiring expert evaluating resumes for the category '{category}'.\n"
-        f"Based on the following resume, rate this candidate from 1 to 10 for a role in {category}. "
-        f"Consider experience, skills, and relevance. Then provide a brief summary of their strengths.\n\n"
-        f"Resume:\n{resume_text[:2000]}\n\n"
-        f"Response format:\n"
-        f"Score: <number>\nSummary: <summary>"
-    )
-    response = llm.complete(prompt)
-    text = response.text.strip()
+def rank_top_candidates_with_index(index, documents, category: str, top_n: int):
+    from gen_engine_llm import GenerativeEngineLLM
 
-    score = 0
-    summary = ""
-    for line in text.splitlines():
-        if line.lower().startswith("score:"):
-            try:
-                score = int(line.split(":")[1].strip())
-            except:
-                score = 0
-        elif line.lower().startswith("summary:"):
-            summary = line.split(":", 1)[1].strip()
-
-    return score, summary
-
-def rank_top_candidates(csv_path: str, category: str, top_n: int, sample_size: int = 5):
-    df = pd.read_csv(csv_path)
-
-    # Normalize category column and input
-    df["Category"] = df["Category"].str.upper().str.strip()
+    # Normalize category input
     category = category.upper().strip()
 
-    # Validate category
-    if category not in df["Category"].unique():
-        print(f"Category '{category}' not found. Available categories: {df['Category'].unique()}")
+    # Filter documents by category
+    filtered_docs = [doc for doc in documents if doc.metadata.get("category", "").upper().strip() == category]
+
+    if not filtered_docs:
+        print(f"Category '{category}' not found in the provided documents.")
         return
 
-    # Filter and sample
-    filtered_df = df[df["Category"] == category]
-    sample_size = min(sample_size, len(filtered_df))
-    sampled_df = filtered_df.sample(n=sample_size, random_state=42)
-
     llm = GenerativeEngineLLM()
-    candidates = []
+    query_engine = index.as_query_engine(llm=llm)
 
-    for _, row in sampled_df.iterrows():
-        score, summary = rate_candidate(llm, row["Resume_str"], category)
+    candidates = []
+    for doc in filtered_docs:
+        query = (
+            f"You are a hiring expert evaluating resumes for the category '{category}'.\n"
+            f"Based on the following information, rate this candidate from 1 to 10 for a role in {category}. "
+            f"Consider experience, skills, and relevance. Then provide a brief summary of their strengths.\n\n"
+            f"Response format:\n"
+            f"Score: <number>\nSummary: <summary>"
+        )
+        response = query_engine.query(query)
+        text = str(response).strip()
+
+        score = 0
+        summary = ""
+        for line in text.splitlines():
+            if line.lower().startswith("score:"):
+                try:
+                    score = int(line.split(":")[1].strip())
+                except:
+                    score = 0
+            elif line.lower().startswith("summary:"):
+                summary = line.split(":", 1)[1].strip()
+
         candidates.append({
-            "id": row["ID"],
+            "id": doc.metadata["id"],
             "score": score,
             "summary": summary
         })
