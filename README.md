@@ -19,3 +19,11 @@ https://github.com/user-attachments/assets/61f6e265-1a42-4f44-80e5-c172174f997c
 https://github.com/user-attachments/assets/9f04a91f-d5f3-45ce-b1bc-83adf8aaa187
 
 
+To run this app, open your terminal and execute:
+
+streamlit run app.py
+
+Inside app.py, there are two available methods — choose the one you want to use.
+If you prefer to run the logic directly in the terminal (without the Streamlit interface), you can execute:
+
+python main.py
