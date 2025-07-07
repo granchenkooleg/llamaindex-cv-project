@@ -5,7 +5,7 @@ from rank_candidates import rank_top_candidates_with_index
 
 
 def main():
-    sample_size = 3
+    sample_size = 50
     top_n = 3
 
     # Ensure sample_size is at least top_n

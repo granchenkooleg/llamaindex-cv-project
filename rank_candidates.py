@@ -1,15 +1,17 @@
+import random
 
-def rank_top_candidates_with_index(index, documents, category: str, top_n: int):
+def rank_top_candidates_with_index(index, documents, category: str, top_n: int, custom_question: str = None):
     from gen_engine_llm import GenerativeEngineLLM
+    import streamlit as st
 
-    # Normalize category input
     category = category.upper().strip()
+    filtered_docs = documents
+    random.shuffle(filtered_docs)
 
-    # Filter documents by category
-    filtered_docs = [doc for doc in documents if doc.metadata.get("category", "").upper().strip() == category]
+    # filtered_docs = [doc for doc in documents if doc.metadata.get("category", "").upper().strip() == category]
 
     if not filtered_docs:
-        print(f"Category '{category}' not found in the provided documents.")
+        st.warning(f"Category '{category}' not found in the provided documents.")
         return
 
     llm = GenerativeEngineLLM()
@@ -17,13 +19,18 @@ def rank_top_candidates_with_index(index, documents, category: str, top_n: int):
 
     candidates = []
     for doc in filtered_docs:
-        query = (
+        default_query = (
             f"You are a hiring expert evaluating resumes for the category '{category}'.\n"
             f"Based on the following information, rate this candidate from 1 to 10 for a role in {category}. "
             f"Consider experience, skills, and relevance. Then provide a brief summary of their strengths.\n\n"
             f"Response format:\n"
             f"Score: <number>\nSummary: <summary>"
         )
+
+        query = (custom_question + "\n\nResponse format:\nScore: <number>\nSummary: <summary>") if custom_question else default_query
+
+        print("Using query:", query)
+
         response = query_engine.query(query)
         text = str(response).strip()
 
@@ -51,3 +58,10 @@ def rank_top_candidates_with_index(index, documents, category: str, top_n: int):
         print(f"ID: {candidate['id']}")
         print(f"Score: {candidate['score']}")
         print(f"Summary: {candidate['summary']}")
+        
+        # Streamlit display
+        st.markdown(f"### 🥇 Top {i} Candidate") 
+        st.markdown(f"**ID:** {candidate['id']}")
+        st.markdown(f"**Score:** {candidate['score']}")
+        st.markdown(f"**Summary:** {candidate['summary']}")
+
