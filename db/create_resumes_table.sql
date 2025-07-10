@@ -1,12 +1,11 @@
+-- db/create_resumes_table.sql
 
--- Enable the pgvector extension if it's not already installed
-CREATE EXTENSION IF NOT EXISTS vector;
+DROP TABLE IF EXISTS resumes;
 
--- Create the resumes table with appropriate columns
-CREATE TABLE IF NOT EXISTS resumes (
+CREATE TABLE resumes (
     id SERIAL PRIMARY KEY,
     doc_id TEXT,
     content TEXT,
     metadata JSONB,
-    embedding VECTOR(384)
+    embedding VECTOR(1536)
 );

@@ -1,9 +1,15 @@
 import os
+from llama_index.llms.openai import OpenAI
+from dotenv import load_dotenv
+from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core import VectorStoreIndex
 from llama_index.core.tools import QueryEngineTool
 from llama_index.vector_stores.postgres import PGVectorStore
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+# from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from gen_engine_llm import GenerativeEngineLLM
+from embedding_model import get_openai_embedding_model
+
+load_dotenv()
 
 def create_resume_retrieval_tool():
     db_params = {
@@ -15,12 +21,15 @@ def create_resume_retrieval_tool():
         "table_name": "resumes"
     }
 
-    embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    embed_model = get_openai_embedding_model()
+    # embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
     vector_store = PGVectorStore.from_params(**db_params)
     index = VectorStoreIndex.from_vector_store(vector_store, embed_model=embed_model)
 
-    query_engine = index.as_query_engine(llm=GenerativeEngineLLM())
+    llm = OpenAI(model="gpt-3.5-turbo", temperature=0)
+    query_engine = index.as_query_engine(llm=llm)
+    # query_engine = index.as_query_engine(llm=GenerativeEngineLLM())
 
     return QueryEngineTool.from_defaults(
         query_engine=query_engine,

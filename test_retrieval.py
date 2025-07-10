@@ -6,7 +6,7 @@ def test_query():
         tool = create_resume_retrieval_tool()
         print("🔍 Tool created successfully!")
 
-        query = "Summarize the experience of candidates with machine learning background."
+        query = "List candidates with cybersecurity experience."
         print(f"📝 Running query: {query}")
         
         response = query_tool(tool, query)
