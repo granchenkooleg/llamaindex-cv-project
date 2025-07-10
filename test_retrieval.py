@@ -1,24 +1,25 @@
-from tools import create_resume_retrieval_tool, query_tool
+# test_retrieval.py
+from tools import create_resume_retrieval_tool
 
-def test_query():
-    try:
-        print("⏳ Creating the retrieval tool...")
-        tool = create_resume_retrieval_tool()
-        print("🔍 Tool created successfully!")
+def run_queries():
+    tool = create_resume_retrieval_tool()
 
-        query = "List candidates with cybersecurity experience."
-        print(f"📝 Running query: {query}")
-        
-        response = query_tool(tool, query)
-        
-        if response:
-            print("✅ Query Result:")
-            print(response)
-        else:
-            print("❌ No response received from the tool.")
+    if tool is None:
+        print("❌ Failed to create tool!")
+        return
 
-    except Exception as e:
-        print(f"❌ Error: {e}")
+    queries = [
+        "List candidates with cybersecurity experience.",
+        "Summarize the educational background of candidates.",
+        "Find candidates who managed teams.",
+    ]
+
+    for query in queries:
+        print(f"\n📝 Running query: {query}")
+        response = tool.query_engine.query(query)
+
+        print("✅ Query Result:")
+        print(response)
 
 if __name__ == "__main__":
-    test_query()
+    run_queries()
