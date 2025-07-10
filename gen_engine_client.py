@@ -8,7 +8,7 @@ load_dotenv()
 
 # API configuration
 API_URL = "https://api.generative.engine.capgemini.com/v2/llm/invoke"
-API_KEY = os.getenv("API_KEY")
+API_KEY = os.getenv("CAPGEMINI_API_KEY")
 
 
 def invoke_llm(prompt, temperature=0.6, max_tokens=512):

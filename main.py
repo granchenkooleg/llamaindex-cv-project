@@ -5,7 +5,7 @@ from rank_candidates import rank_top_candidates_with_index
 
 
 def main():
-    sample_size = 50
+    sample_size = 5
     top_n = 3
 
     # Ensure sample_size is at least top_n
@@ -13,8 +13,8 @@ def main():
 
     documents = load_resumes(sample_size)
     index = build_index(documents)
-    # summarize_candidates(index, documents)
-    rank_top_candidates_with_index(index, documents, category="INFORMATION-TECHNOLOGY", top_n=top_n)
+    summarize_candidates(index, documents)
+    # rank_top_candidates_with_index(index, documents, category="INFORMATION-TECHNOLOGY", top_n=top_n)
 
 if __name__ == "__main__":
     main()
