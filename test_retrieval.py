@@ -12,6 +12,7 @@ def format_query_result(summary: str, source_nodes: list) -> str:
         )
     return f"✅ Query Result:\n{summary}\n\n" + "\n".join(formatted_results)
 
+# This script runs queries against the resume retrieval tool and formats the results for display.
 def run_queries():
     tool = create_resume_retrieval_tool()
 
