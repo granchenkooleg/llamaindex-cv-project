@@ -39,3 +39,8 @@ II.
 
 
 <img width="2225" height="1147" alt="Screenshot 2025-07-11 at 10 42 13" src="https://github.com/user-attachments/assets/e844f0c9-abe6-4be3-833a-e7a7b1b554f0" />
+
+To run this app, open your terminal and execute:
+
+python test_agent.py
+
