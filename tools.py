@@ -16,10 +16,37 @@ load_dotenv()
 # Resume Retrieval Tool
 # This tool retrieves candidate information from resumes stored in a PostgreSQL database.
 # It uses a vector store to index the resumes and allows querying based on user input.
+from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.llms.openai import OpenAI
+from llama_index.vector_stores.postgres import PGVectorStore
+from llama_index.core import VectorStoreIndex, StorageContext
+from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.core.tools import FunctionTool
+import os
+
+from embedding_model import get_openai_embedding_model
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Format the query result for display
+def format_query_result(summary: str, source_nodes: list) -> str:
+    formatted_results = []
+    for node in source_nodes:
+        metadata = node.metadata if hasattr(node, "metadata") else {}
+        doc_id = metadata.get("id", "No ID")
+        category = metadata.get("category", "No Category")
+        content_snippet = node.text[:200] if hasattr(node, "text") else str(node)[:200]
+        formatted_results.append(
+            f"🧾 Candidate ID: {doc_id} | Category: {category}\n📝 Content: {content_snippet}\n{'-'*80}"
+        )
+    return f"✅ Query Result:\n{summary}\n\n" + "\n".join(formatted_results)
+
+# Resume retrieval tool
 def resume_query_function(input: str) -> str:
     print("📄 Resume Retrieval Tool invoked")
-    embed_model = get_openai_embedding_model()
 
+    embed_model = get_openai_embedding_model()
     vector_store = PGVectorStore.from_params(
         database=os.getenv("PG_DATABASE"),
         host=os.getenv("PG_HOST"),
@@ -40,7 +67,11 @@ def resume_query_function(input: str) -> str:
         return_source=True
     )
 
-    return query_engine.query(input).response
+    response = query_engine.query(input)
+    summary = str(response)
+    source_nodes = response.source_nodes
+
+    return format_query_result(summary, source_nodes)
 
 resume_qa_tool = FunctionTool.from_defaults(
     fn=resume_query_function,
@@ -70,7 +101,7 @@ general_qa_tool = FunctionTool.from_defaults(
 # Wikipedia Tool
 def wiki_query_function(query: str) -> str:
     print("🌍 Wikipedia Tool invoked")
-    return wiki_tools[0].query(query).response  # ← this will still work, but only if manually managed
+    return wiki_tools[0].query(query).response
 
 wiki_qa_tool = FunctionTool.from_defaults(
     fn=wiki_query_function,
