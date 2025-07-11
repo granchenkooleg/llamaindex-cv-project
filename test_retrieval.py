@@ -1,16 +1,16 @@
 from tools import create_resume_retrieval_tool
 
-def format_query_result(summary: str, source_nodes: list) -> str:
-    formatted_results = []
-    for node in source_nodes:
-        metadata = node.metadata if hasattr(node, "metadata") else {}
-        doc_id = metadata.get("id", "No ID")
-        category = metadata.get("category", "No Category")
-        content_snippet = node.text[:200] if hasattr(node, "text") else str(node)[:200]
-        formatted_results.append(
-            f"🧾 Candidate ID: {doc_id} | Category: {category}\n📝 Content: {content_snippet}\n{'-'*80}"
-        )
-    return f"✅ Query Result:\n{summary}\n\n" + "\n".join(formatted_results)
+# def format_query_result(summary: str, source_nodes: list) -> str:
+#     formatted_results = []
+#     for node in source_nodes:
+#         metadata = node.metadata if hasattr(node, "metadata") else {}
+#         doc_id = metadata.get("id", "No ID")
+#         category = metadata.get("category", "No Category")
+#         content_snippet = node.text[:200] if hasattr(node, "text") else str(node)[:200]
+#         formatted_results.append(
+#             f"🧾 Candidate ID: {doc_id} | Category: {category}\n📝 Content: {content_snippet}\n{'-'*80}"
+#         )
+#     return f"✅ Query Result:\n{summary}\n\n" + "\n".join(formatted_results)
 
 # This script runs queries against the resume retrieval tool and formats the results for display.
 def run_queries():
