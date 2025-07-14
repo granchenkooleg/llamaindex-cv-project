@@ -38,7 +38,18 @@ II.
 - Integrated everything properly into a live, interactive workflow
 
 
-<img width="2225" height="1147" alt="Screenshot 2025-07-11 at 10 42 13" src="https://github.com/user-attachments/assets/e844f0c9-abe6-4be3-833a-e7a7b1b554f0" />
+
+https://github.com/user-attachments/assets/bbdb3472-abb3-4583-bf94-baacbbf86265
+
+
+
+https://github.com/user-attachments/assets/90a4b012-c923-4f4b-b971-d55b642771c2
+
+
+
+https://github.com/user-attachments/assets/c378ff35-56ac-4468-a5de-ee0896223129
+
+
 
 To run this app, open your terminal and execute:
 
